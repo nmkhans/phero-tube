@@ -69,29 +69,49 @@ function loadVideos() {
 function displayVideo(videos) {
   videos.forEach((video) => {
     const videoCard = document.createElement("div");
-    videoCard.className = "card bg-base-100 shadow-sm";
+    videoCard.className = "card bg-base-100 cursor-pointer";
+    console.log(video.authors);
 
     videoCard.innerHTML = `
-      <figure>
+      <figure class="!block relative">
         <img
           src="${video.thumbnail}"
           alt="video thumbnail"
-          class="h-[200px]"
+          class="h-[200px] w-full"
         />
+        <div class="bg-[#171717] text-white inline-block p-1 rounded-md absolute right-[2%] bottom-[5%]">3hrs 56 min ago</div>
       </figure>
-      <div class="card-body">
-        <h2 class="card-title">
-          Card Title
-        </h2>
-        
-        <div class="card-actions justify-end">
-          <div class="badge badge-outline">Fashion</div>
-          <div class="badge badge-outline">Products</div>
+      <div class="py-5 flex gap-x-5">
+        <div class="avatar !inline-block">
+          <div class="w-12 rounded-full object-contain">
+            <img src="${video.authors[0].profile_picture}" />
+          </div>
+        </div>
+        <div>
+          <h2 class="card-title">
+            ${video.title}
+          </h2>
+            
+          <div class="flex gap-x-2">
+            <h4 class="text-[#171717]/70 text-[14px]">${
+              video.authors[0].profile_name
+            }</h4>
+            ${
+              video.authors[0].verified
+                ? `<div>
+                  <img src="./assets/badge.png" />
+                </div>`
+                : ""
+            }
+          </div>
+          <div class="text-[#171717]/70 text-[14px] mt-2">${
+            video.others.views
+          } views</div>
         </div>
       </div>
     `;
 
-    videoContainer.appendChild(videoCard)
+    videoContainer.appendChild(videoCard);
   });
 }
 
