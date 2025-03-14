@@ -2,6 +2,7 @@ const categoryContainer = document.querySelector(
   "#category_container"
 );
 const videoContainer = document.querySelector("#video_container");
+const searchBox = document.getElementById("search_box");
 
 function loadCategories() {
   const url =
@@ -57,9 +58,8 @@ function handleCategoryClick(e) {
   }
 }
 
-function loadVideos() {
-  const url =
-    "https://openapi.programming-hero.com/api/phero-tube/videos";
+function loadVideos(title = "") {
+  const url = `https://openapi.programming-hero.com/api/phero-tube/videos?title=${title}`;
 
   fetch(url)
     .then((res) => res.json())
@@ -192,6 +192,10 @@ function displayVideoDetail(video) {
 
   modalContainer.showModal();
 }
+
+searchBox.addEventListener("keyup", (e) => {
+  loadVideos(e.target.value);
+});
 
 loadCategories();
 loadVideos();
