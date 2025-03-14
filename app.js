@@ -17,6 +17,7 @@ function displayCategories(categories) {
     const button = document.createElement("button");
     button.innerText = category.category;
     button.className = "btn btn-neutral btn-sm";
+    button.id = category.category_id;
 
     categoryContainer.appendChild(button);
   }
@@ -48,6 +49,13 @@ function handleButtonColorChange(e) {
 
 function handleCategoryClick(e) {
   handleButtonColorChange(e);
+
+  if(e.target.innerText === "All") {
+    loadVideos();
+  } else {
+    loadVideoByCategory(e.target.id)
+  }
+
 }
 
 function loadVideos() {
@@ -59,18 +67,12 @@ function loadVideos() {
     .then((data) => displayVideo(data.videos));
 }
 
-/*
-
-<div class="card bg-base-100 w-96 shadow-sm">
-  
-</div>
-*/
-
 function displayVideo(videos) {
+  videoContainer.innerHTML = "";
+
   videos.forEach((video) => {
     const videoCard = document.createElement("div");
     videoCard.className = "card bg-base-100 cursor-pointer";
-    console.log(video.authors);
 
     videoCard.innerHTML = `
       <figure class="!block relative">
@@ -113,6 +115,14 @@ function displayVideo(videos) {
 
     videoContainer.appendChild(videoCard);
   });
+}
+
+function loadVideoByCategory(id) {
+  const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+
+  fetch(url)
+  .then(res => res.json())
+  .then(data => displayVideo(data.category))
 }
 
 loadCategories();
