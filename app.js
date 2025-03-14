@@ -50,12 +50,11 @@ function handleButtonColorChange(e) {
 function handleCategoryClick(e) {
   handleButtonColorChange(e);
 
-  if(e.target.innerText === "All") {
+  if (e.target.innerText === "All") {
     loadVideos();
   } else {
-    loadVideoByCategory(e.target.id)
+    loadVideoByCategory(e.target.id);
   }
-
 }
 
 function loadVideos() {
@@ -69,6 +68,16 @@ function loadVideos() {
 
 function displayVideo(videos) {
   videoContainer.innerHTML = "";
+
+  if (videos.length === 0) {
+    videoContainer.innerHTML = `
+      <div class="col-span-full text-center py-10">
+        <img class="block mx-auto" src="./assets/Icon.png" alt="No video found image" />
+        <h2 class="font-semibold text-2xl mt-5">Oops!! Sorry, There is no content here!</h2>
+      </div>
+    `;
+    return;
+  }
 
   videos.forEach((video) => {
     const videoCard = document.createElement("div");
@@ -111,6 +120,9 @@ function displayVideo(videos) {
           } views</div>
         </div>
       </div>
+      <button onclick="showVideoDetail('${
+        video.video_id
+      }')" class="btn btn-block btn-neutral hover:bg-red-500 border-0">Show Detail</button>
     `;
 
     videoContainer.appendChild(videoCard);
@@ -121,8 +133,64 @@ function loadVideoByCategory(id) {
   const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
 
   fetch(url)
-  .then(res => res.json())
-  .then(data => displayVideo(data.category))
+    .then((res) => res.json())
+    .then((data) => displayVideo(data.category));
+}
+
+function showVideoDetail(id) {
+  const url = `https://openapi.programming-hero.com/api/phero-tube/video/${id}`;
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => displayVideoDetail(data.video));
+}
+
+function displayVideoDetail(video) {
+  const modalContainer = document.getElementById("modal_container");
+  const modalContent = document.getElementById("modal_content");
+
+  modalContent.innerHTML = `
+    <div>
+      <div class="card bg-base-100 image-full shadow-sm">
+        <figure>
+          <img
+            src="${video.thumbnail}" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">${video.title}</h2>
+          <p>${video.description}</p>
+        </div>
+      </div>
+      <div class="mt-5">
+        <div class="py-5 flex gap-x-5">
+        <div class="avatar !inline-block">
+          <div class="w-12 rounded-full object-contain">
+            <img src="${video.authors[0].profile_picture}" />
+          </div>
+        </div>
+        <div>
+          <div class="flex gap-x-2">
+              <h4 class="text-[#171717]/70 text-[14px]">${
+                video.authors[0].profile_name
+              }</h4>
+              ${
+                video.authors[0].verified
+                  ? `<div>
+                    <img src="./assets/badge.png" />
+                  </div>`
+                  : ""
+              }
+            </div>
+            <div class="text-[#171717]/70 text-[14px] mt-2">${
+              video.others.views
+            } views</div>
+          </div>
+      </div>
+      </div>
+    </div>
+  `;
+
+  modalContainer.showModal();
 }
 
 loadCategories();

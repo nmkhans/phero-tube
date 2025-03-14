@@ -65,10 +65,26 @@
     </header>
     <section class="mt-5 py-5">
       <div class="container mx-auto">
-        <div id="video_container" class="grid grid-cols-4 gap-5">
-          
-        </div>
+        <div
+          id="video_container"
+          class="grid grid-cols-4 gap-5"
+        ></div>
       </div>
+    </section>
+    <section>
+      <dialog id="modal_container" class="modal">
+        <div class="modal-box">
+          <div id="modal_content">
+
+          </div>
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </section>
     <script src="./app.js"></script>
   </body>
